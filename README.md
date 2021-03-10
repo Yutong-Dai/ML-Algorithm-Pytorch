@@ -1,2 +1,4 @@
-# ML-Algorithmp-Pytorch
- Implement classical machine learning algorithm using Pytorch
+This repo is a collection of optimization algorithms implemented in Pytorch.
+
+# SARAH / AI-SARAH
+
