@@ -2,7 +2,7 @@
 File: AISARAH.py
 Author: Yutong Dai (yutongdai95@gmail.com)
 File Created: 2021-03-10 14:17
-Last Modified: 2021-03-11 11:17
+Last Modified: 2021-03-11 11:51
 --------------------------------------------
 Description:
 '''
@@ -10,6 +10,8 @@ Description:
 import torch
 import numpy as np
 np.random.seed(0)
+
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 class AISARAH:
@@ -36,6 +38,7 @@ class AISARAH:
         samples = [i for i in range(self.nSamples)]
         totalBatches = int(np.ceil(self.nSamples / params['batchsize']))
         flag = 'Reach the maximum number of iterations.'
+        alpha = torch.zeros(1, requires_grad=True).to(device)
         if params['printlevel'] > 0:
             print(f'*******************************************************************')
             print(f'                    AI-SARAH. Version: (03/11/2021)                ')
@@ -66,7 +69,6 @@ class AISARAH:
             # inner iteration
             while v_norm >= params['gamma'] * gradfx_full_norm:
                 # print(v_norm, params['gamma'] * gradfx_full_norm)
-                alpha = torch.zeros(1, requires_grad=True)
                 counter = np.mod(iteration, totalBatches)
                 start, end = counter * params['batchsize'], (counter + 1) * params['batchsize']
                 if start == 0:

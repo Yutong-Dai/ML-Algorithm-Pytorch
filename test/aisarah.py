@@ -2,7 +2,7 @@
 File: aisarah.py
 Author: Yutong Dai (yutongdai95@gmail.com)
 File Created: 2021-03-10 21:46
-Last Modified: 2021-03-11 11:17
+Last Modified: 2021-03-11 11:23
 --------------------------------------------
 Description:
 '''
@@ -18,7 +18,7 @@ from src.Lossfunctions.LeastSquares import LeastSquares
 import torch
 
 torch.manual_seed(0)
-print("[Gradient Descent] case 1: m > n")
+print("case 1: m > n")
 # m, n = 100000, 1000
 m, n = 10, 3
 if torch.cuda.is_available():
