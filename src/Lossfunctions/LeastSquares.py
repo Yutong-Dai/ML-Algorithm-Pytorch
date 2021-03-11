@@ -2,7 +2,7 @@
 File: LeastSquares.py
 Author: Yutong Dai (yutongdai95@gmail.com)
 File Created: 2021-03-10 00:33
-Last Modified: 2021-03-11 11:43
+Last Modified: 2021-03-11 11:54
 --------------------------------------------
 Description:
 '''
@@ -18,9 +18,9 @@ class LeastSquares:
         """
         self.m, self.n = A.shape
         self.A, self.b = A, b
+        self.x = torch.zeros(1)
         if A.device.type == 'cuda':
             self.x = self.x.cuda()
-        self.x = torch.zeros(1)
         self.minibatch = None
 
     def forward(self, x, minibatch=None):
