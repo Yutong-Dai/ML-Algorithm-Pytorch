@@ -2,7 +2,7 @@
 File: aisarah.py
 Author: Yutong Dai (yutongdai95@gmail.com)
 File Created: 2021-03-10 21:46
-Last Modified: 2021-03-11 11:23
+Last Modified: 2021-03-11 15:27
 --------------------------------------------
 Description:
 '''
@@ -32,7 +32,7 @@ else:
 
 prob = LeastSquares(A, b)
 aisarah = AISARAH(prob)
-params['batchsize'] = m
+params['batchsize'] = m // 2
 params['maxepoch'] = 20
 result = aisarah.solve(x0, params)
 

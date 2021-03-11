@@ -2,7 +2,7 @@
 File: AISARAH.py
 Author: Yutong Dai (yutongdai95@gmail.com)
 File Created: 2021-03-10 14:17
-Last Modified: 2021-03-11 11:51
+Last Modified: 2021-03-11 15:14
 --------------------------------------------
 Description:
 '''
@@ -60,7 +60,7 @@ class AISARAH:
                 break
             # print(f'epoch:{epoch} | fval:{self.prob.loss} | grad:{gradfx_full_norm}')
             if epoch % params['printevery'] == 0:
-                print(f' epoch       f         |grad|  | iters    pass   |v|')
+                print(f' epoch       f         |grad|  | iters    pass      |v|')
             print(f'{epoch:5d}  {self.prob.loss:3.4e}   {gradfx_full_norm:3.4e}', end='')
             v = gradfx_full
             v_norm = gradfx_full_norm
@@ -104,7 +104,7 @@ class AISARAH:
                 v_norm = torch.linalg.norm(v)
                 iteration += 1
             # print(f'effective pass:{effective_pass-1} | acc:{v_norm}')
-            print(f' | {iteration:5d}  {effective_pass-1:5d}   {v_norm:3.4e}')
+            print(f' | {iteration:5d}  {effective_pass:5d}   {v_norm:3.4e}')
             epoch += 1
         print(f'-------------------------------------------------------------------')
         print(f'Exit: {flag}')
