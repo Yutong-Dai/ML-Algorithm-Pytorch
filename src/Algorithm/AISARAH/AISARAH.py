@@ -2,7 +2,7 @@
 File: AISARAH.py
 Author: Yutong Dai (yutongdai95@gmail.com)
 File Created: 2021-03-10 14:17
-Last Modified: 2021-03-12 02:26
+Last Modified: 2021-03-12 02:31
 --------------------------------------------
 Description:
 '''
@@ -39,6 +39,7 @@ class AISARAH:
         totalBatches = int(np.ceil(self.nSamples / params['batchsize']))
         flag = 'Reach the maximum number of iterations.'
         alpha = torch.zeros(1, requires_grad=True).to(device)
+        fseq = []
         if params['printlevel'] > 0:
             print(f'*******************************************************************')
             print(f'                    AI-SARAH. Version: (03/11/2021)                ')
@@ -62,6 +63,7 @@ class AISARAH:
             if epoch % params['printevery'] == 0:
                 print(f' epoch       f         |grad|  | iters    pass      |v|')
             print(f'{epoch:5d}  {self.prob.loss:3.4e}   {gradfx_full_norm:3.4e}', end='')
+            fseq.append(self.prob.loss.item())
             v = gradfx_full
             v_norm = gradfx_full_norm
             iteration = 0
@@ -108,3 +110,5 @@ class AISARAH:
             epoch += 1
         print(f'-------------------------------------------------------------------')
         print(f'Exit: {flag}')
+        result = {'x': x.detach(), 'fx': fseq[-1], 'gradNorm': gradfx_full_norm, 'fseq': fseq}
+        return result
