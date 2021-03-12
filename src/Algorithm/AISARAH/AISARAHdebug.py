@@ -2,7 +2,7 @@
 File: AISARAH.py
 Author: Yutong Dai (yutongdai95@gmail.com)
 File Created: 2021-03-10 14:17
-Last Modified: 2021-03-12 02:11
+Last Modified: 2021-03-12 02:10
 --------------------------------------------
 Description:
 '''
@@ -65,34 +65,33 @@ class AISARAH:
             v = gradfx_full
             v_norm = gradfx_full_norm
             iteration = 0
-            effective_pass = 0
+            effective_pass = -1
             # inner iteration
-            while v_norm >= params['gamma'] * gradfx_full_norm:
+            while v_norm >= params['gamma'] * gradfx_full_norm and iteration < 3:
                 # print(v_norm, params['gamma'] * gradfx_full_norm)
                 counter = np.mod(iteration, totalBatches)
                 start, end = counter * params['batchsize'], (counter + 1) * params['batchsize']
                 if start == 0:
                     effective_pass += 1
                     np.random.shuffle(samples)
-                    # print('==========')
-                    # print(samples)
-                    # if effective_pass > 10:
-                    #     break
+                # print(f'gf:{gradfx_full}')
                 minibatch = samples[start:end]
-                # print(minibatch)
                 # construct optimality measure xi_alpha
                 gradfx_minibacth = self.prob.grad(x, minibatch) + 0.0
                 x_trial = x - alpha * v
                 # gradfx_trial_minibatch is a function of alpha
                 fx_trial_minibacth = self.prob.forward(x_trial, minibatch)
                 gradfx_trial_minibatch = torch.autograd.grad(fx_trial_minibacth, x_trial, retain_graph=True, create_graph=True)
+                print(f'\n gft:{gradfx_trial_minibatch} \n gf:{gradfx_minibacth}\n v:{v} ')
                 xi_alpha = torch.linalg.norm(gradfx_trial_minibatch[0] - gradfx_minibacth + v) ** 2
+                print(f'\nxi_alpha:{xi_alpha}')
                 # perform one newton step to find an approximate minimizer of xi_alpha
                 # this operation will not set value to alpha.grad; no need to zero out gradient
                 grad_alpha = torch.autograd.grad(xi_alpha, alpha, retain_graph=True, create_graph=True)
                 hess_alpha = torch.autograd.grad(grad_alpha, alpha)
                 alpha_approx = alpha - grad_alpha[0] / hess_alpha[0]
                 stepsize = min(alpha_approx.data, alpha_max)
+                print(f'step:{stepsize}\n====')
                 delta = self._cal_delta(alpha_approx, iteration, beta=0.999).data
                 alpha_max = 1 / delta
                 # print(alpha_approx.data, stepsize, alpha_max)
@@ -105,6 +104,7 @@ class AISARAH:
                 iteration += 1
             # print(f'effective pass:{effective_pass-1} | acc:{v_norm}')
             print(f' | {iteration:5d}  {effective_pass:5d}   {v_norm:3.4e}')
+            break
             epoch += 1
         print(f'-------------------------------------------------------------------')
         print(f'Exit: {flag}')
