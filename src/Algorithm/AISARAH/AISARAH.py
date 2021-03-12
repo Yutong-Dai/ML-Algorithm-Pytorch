@@ -2,7 +2,7 @@
 File: AISARAH.py
 Author: Yutong Dai (yutongdai95@gmail.com)
 File Created: 2021-03-10 14:17
-Last Modified: 2021-03-12 02:31
+Last Modified: 2021-03-12 02:33
 --------------------------------------------
 Description:
 '''
@@ -76,8 +76,6 @@ class AISARAH:
                 if start == 0:
                     effective_pass += 1
                     np.random.shuffle(samples)
-                    print('==========')
-                    print(samples)
                     if effective_pass > params['effective_pass']:
                         break
                 minibatch = samples[start:end]
