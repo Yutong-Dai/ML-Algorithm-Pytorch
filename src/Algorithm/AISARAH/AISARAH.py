@@ -2,7 +2,7 @@
 File: AISARAH.py
 Author: Yutong Dai (yutongdai95@gmail.com)
 File Created: 2021-03-10 14:17
-Last Modified: 2021-03-12 02:11
+Last Modified: 2021-03-12 02:26
 --------------------------------------------
 Description:
 '''
@@ -74,10 +74,10 @@ class AISARAH:
                 if start == 0:
                     effective_pass += 1
                     np.random.shuffle(samples)
-                    # print('==========')
-                    # print(samples)
-                    # if effective_pass > 10:
-                    #     break
+                    print('==========')
+                    print(samples)
+                    if effective_pass > params['effective_pass']:
+                        break
                 minibatch = samples[start:end]
                 # print(minibatch)
                 # construct optimality measure xi_alpha
