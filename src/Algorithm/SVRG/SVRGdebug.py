@@ -2,7 +2,7 @@
 File: SVRG.py
 Author: Yutong Dai (yutongdai95@gmail.com)
 File Created: 2021-03-10 14:17
-Last Modified: 2021-03-12 01:23
+Last Modified: 2021-03-12 01:27
 --------------------------------------------
 Description:
 '''
@@ -37,12 +37,13 @@ class SVRG:
             for k, v in params.items():
                 print(f' params: {k} | value:{v}')
             print(f'*******************************************************************')
-        while epoch <= params['maxepoch']:
+        while epoch <= 2:
             # outter loop: evaluate full gradient
             # clear gradient
             if x.grad is not None:
                 x.grad.data.zero_()
             gradfx_full = self.prob.grad(x) + 0.0
+            print(f'x:{x} | gfull:{gradfx_full}')
             gradfx_full_norm = torch.linalg.norm(gradfx_full)
             if epoch % params['printevery'] == 0:
                 print(f' epoch       f         |grad| ')
@@ -58,19 +59,24 @@ class SVRG:
 
             # inner iteration
             x_trial = x.clone().detach().requires_grad_(True)
-            for j in range(params['effective_pass']):
+            for j in range(2):
                 np.random.shuffle(samples)
-                for i in range(totalBatches):
+                for i in range(2):
                     start, end = i * params['batchsize'], (i + 1) * params['batchsize']
                     minibatch = samples[start:end]
+                    # if j == 1:
+                    # print(f'xt:{x_trial}, x:{x}')
                     gradfx_minibacth = self.prob.grad(x, minibatch)
                     if i == 0 and j == 0:
                         gradfx_trial_minibacth = gradfx_minibacth
                     else:
                         gradfx_trial_minibacth = self.prob.grad(x_trial, minibatch)
                     v = gradfx_trial_minibacth - gradfx_minibacth + gradfx_full
+                    print(f'bacth:{minibatch} | gxt:{gradfx_trial_minibacth} | gx:{gradfx_minibacth} | v:{v}')
                     with torch.no_grad():
                         x_trial.sub_(params['stepsize'] * v)
+                    print('==')
+                print('=========')
             x = x_trial.clone().detach().requires_grad_(True)
             epoch += 1
         print(f'-------------------------------------------------------------------')
